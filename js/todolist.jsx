@@ -5,8 +5,10 @@ import ToDoListItem from './todolist-item.jsx';
 
 export default class ToDoList extends React.Component {
     renderItems(){
+        const props = _.omit(this.props, 'todos');
+
         return _.map(this.props.todos, (todo, index) => <ToDoListItem key={index}
-                                                                     {...todo}/>);
+                                                                     {...todo} {...props}/>);
 
     }
 

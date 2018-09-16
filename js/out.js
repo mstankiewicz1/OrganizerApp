@@ -22220,10 +22220,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var todos = [{
-    task: 'make React tutorial',
+    task: 'Nauczyć się Reacta',
     isCompleted: false
 }, {
-    task: 'eat dinner',
+    task: 'Zostać Front-end Developerem',
     isCompleted: true
 }];
 
@@ -22252,15 +22252,50 @@ var App = function (_React$Component) {
                     null,
                     'OrganizerApp'
                 ),
-                _react2.default.createElement(_createTodo2.default, null),
+                _react2.default.createElement(_createTodo2.default, { todos: this.state.todos, createTask: this.createTask.bind(this) }),
                 _react2.default.createElement(_todolist2.default, {
                     todos: this.state.todos,
-                    createTask: this.createTask.bind(this) })
+                    toggleTask: this.toggleTask.bind(this),
+                    saveTask: this.saveTask.bind(this),
+                    deleteTask: this.deleteTask.bind(this)
+                })
             );
         }
     }, {
+        key: 'toggleTask',
+        value: function toggleTask(task) {
+            var foundTodo = _.find(this.state.todos, function (todo) {
+                return todo.task === task;
+            });
+            foundTodo.isCompleted = !foundTodo.isCompleted;
+            this.setState({ todos: this.state.todos });
+        }
+    }, {
         key: 'createTask',
-        value: function createTask(task) {}
+        value: function createTask(task) {
+            this.state.todos.push({
+                task: task,
+                isCompleted: false
+            });
+            this.setState({ todos: this.state.todos });
+        }
+    }, {
+        key: 'saveTask',
+        value: function saveTask(oldTask, newTask) {
+            var foundTodo = _.find(this.state.todos, function (todo) {
+                return todo.task === oldTask;
+            });
+            foundTodo.task = newTask;
+            this.setState({ todos: this.state.todos });
+        }
+    }, {
+        key: 'deleteTask',
+        value: function deleteTask(taskToDelete) {
+            _.remove(this.state.todos, function (todo) {
+                return todo.task === taskToDelete;
+            });
+            this.setState({ todos: this.state.todos });
+        }
     }]);
 
     return App;
@@ -22293,41 +22328,85 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TodosList = function (_React$Component) {
-    _inherits(TodosList, _React$Component);
+var CreateTodo = function (_React$Component) {
+    _inherits(CreateTodo, _React$Component);
 
-    function TodosList() {
-        _classCallCheck(this, TodosList);
+    function CreateTodo(props) {
+        _classCallCheck(this, CreateTodo);
 
-        return _possibleConstructorReturn(this, (TodosList.__proto__ || Object.getPrototypeOf(TodosList)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (CreateTodo.__proto__ || Object.getPrototypeOf(CreateTodo)).call(this, props));
+
+        _this.state = {
+            error: null
+        };
+
+        return _this;
     }
 
-    _createClass(TodosList, [{
+    _createClass(CreateTodo, [{
+        key: "renderError",
+        value: function renderError() {
+            if (!this.state.error) {
+                return null;
+            }
+            return _react2.default.createElement(
+                "div",
+                { style: { color: 'red' } },
+                this.state.error
+            );
+        }
+    }, {
         key: "render",
         value: function render() {
             return _react2.default.createElement(
                 "form",
                 { onSubmit: this.handleCreate.bind(this) },
-                _react2.default.createElement("input", { type: "text", placeholder: "What do I need to do?", ref: "createInput" }),
+                _react2.default.createElement("input", { type: "text", placeholder: "Co mam do zrobienia?", ref: "createInput" }),
                 _react2.default.createElement(
                     "button",
                     null,
                     "Create"
-                )
+                ),
+                this.renderError()
             );
         }
     }, {
         key: "handleCreate",
         value: function handleCreate(event) {
             event.preventDefault();
-            console.log(this.refs.createInput.value);
+
+            var createInput = this.refs.createInput;
+            var task = createInput.value;
+            var validateInput = this.validateInput(task);
+
+            if (validateInput) {
+                this.setState({ error: validateInput });
+                return;
+            }
+
+            this.setState({ error: null });
+            this.props.createTask(task);
+            this.refs.createInput.value = '';
+        }
+    }, {
+        key: "validateInput",
+        value: function validateInput(task) {
+            if (!task) {
+                return 'Proszę wpisz zadanie';
+            } else if (_.find(this.props.todos, function (todo) {
+                return todo.task === task;
+            })) {
+                return 'Zadanie już istnieje';
+            } else {
+                return null;
+            }
         }
     }]);
 
-    return TodosList;
+    return CreateTodo;
 }(_react2.default.Component);
 
-exports.default = TodosList;
+exports.default = CreateTodo;
 
 /***/ }),
 /* 186 */
@@ -22380,9 +22459,11 @@ var ToDoList = function (_React$Component) {
     _createClass(ToDoList, [{
         key: 'renderItems',
         value: function renderItems() {
+            var props = _lodash2.default.omit(this.props, 'todos');
+
             return _lodash2.default.map(this.props.todos, function (todo, index) {
                 return _react2.default.createElement(_todolistItem2.default, _extends({ key: index
-                }, todo));
+                }, todo, props));
             });
         }
     }, {
@@ -39677,61 +39758,100 @@ var ToDoListItem = function (_React$Component) {
     }
 
     _createClass(ToDoListItem, [{
-        key: "renderActionSection",
+        key: 'renderTaskSection',
+        value: function renderTaskSection() {
+            var _props = this.props,
+                task = _props.task,
+                isCompleted = _props.isCompleted;
+
+
+            var taskStyle = {
+                color: isCompleted ? 'green' : 'red',
+                cursor: 'pointer'
+            };
+
+            if (this.state.isEditing) {
+                return _react2.default.createElement(
+                    'td',
+                    null,
+                    _react2.default.createElement(
+                        'form',
+                        { onSubmit: this.onSaveClick.bind(this) },
+                        _react2.default.createElement('input', { type: 'text', defaultValue: task, ref: 'editInput' })
+                    )
+                );
+            }
+
+            return _react2.default.createElement(
+                'td',
+                { style: taskStyle,
+                    onClick: this.props.toggleTask.bind(this, task)
+                },
+                task
+            );
+        }
+    }, {
+        key: 'renderActionSection',
         value: function renderActionSection() {
             if (this.state.isEditing) {
                 return _react2.default.createElement(
-                    "td",
+                    'td',
                     null,
                     _react2.default.createElement(
-                        "button",
-                        null,
-                        "Save"
+                        'button',
+                        { onClick: this.onSaveClick.bind(this) },
+                        'Save'
                     ),
                     _react2.default.createElement(
-                        "button",
+                        'button',
                         { onClick: this.onCancelClick.bind(this) },
-                        "Cancel"
+                        'Cancel'
                     )
                 );
             }
             return _react2.default.createElement(
-                "td",
+                'td',
                 null,
                 _react2.default.createElement(
-                    "button",
+                    'button',
                     { onClick: this.onEditClick.bind(this) },
-                    "Edit"
+                    'Edit'
                 ),
                 _react2.default.createElement(
-                    "button",
-                    null,
-                    "Delete"
+                    'button',
+                    { onClick: this.props.deleteTask.bind(this, this.props.task) },
+                    'Delete'
                 )
             );
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                "tr",
+                'tr',
                 null,
-                _react2.default.createElement(
-                    "td",
-                    null,
-                    this.props.task
-                ),
+                this.renderTaskSection(),
                 this.renderActionSection()
             );
         }
     }, {
-        key: "onEditClick",
+        key: 'onEditClick',
         value: function onEditClick() {
             this.setState({ isEditing: true });
         }
     }, {
-        key: "onCancelClick",
+        key: 'onCancelClick',
         value: function onCancelClick() {
+            this.setState({ isEditing: false });
+        }
+    }, {
+        key: 'onSaveClick',
+        value: function onSaveClick(event) {
+            event.preventDefault();
+
+            var oldTask = this.props.task;
+            var newTask = this.refs.editInput.value;
+            this.props.saveTask(oldTask, newTask);
             this.setState({ isEditing: false });
         }
     }]);
