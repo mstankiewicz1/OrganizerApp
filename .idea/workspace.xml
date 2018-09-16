@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="110a8f52-50ae-4ca3-885b-88e1aaca7c15" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/js/app.jsx" afterPath="$PROJECT_DIR$/js/app.jsx" />
-      <change beforePath="$PROJECT_DIR$/js/create-todo.jsx" afterPath="$PROJECT_DIR$/js/create-todo.jsx" />
-      <change beforePath="$PROJECT_DIR$/js/out.js" afterPath="$PROJECT_DIR$/js/out.js" />
-      <change beforePath="$PROJECT_DIR$/js/todolist-item.jsx" afterPath="$PROJECT_DIR$/js/todolist-item.jsx" />
-      <change beforePath="$PROJECT_DIR$/js/todolist.jsx" afterPath="$PROJECT_DIR$/js/todolist.jsx" />
-    </list>
+    <list default="true" id="110a8f52-50ae-4ca3-885b-88e1aaca7c15" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -242,12 +234,12 @@
       <workItem from="1536769770769" duration="12957000" />
       <workItem from="1536796584874" duration="28000" />
       <workItem from="1537026795129" duration="699000" />
-      <workItem from="1537084320914" duration="5772000" />
+      <workItem from="1537084320914" duration="5838000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46180000" />
+    <option name="totallyTimeSpent" value="46246000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
